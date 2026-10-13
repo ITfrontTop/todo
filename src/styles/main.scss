@@ -1,2 +1,86 @@
-@forward './base/reset';
-@forward './base/global';
+@use '/src/styles/base/reset';
+@use '/src/styles/abstracts/variables' as v;
+@use '/src/styles/abstracts/placeholder';
+@use '/src/styles/base/global';
+
+.main {
+  padding: 5rem 0;
+
+  height: 100vh;
+
+  background-color: v.$color-bg-light;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2.5rem;
+  }
+}
+
+.title {
+  text-align: center;
+
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: v.$color-text;
+}
+
+.add {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+
+  gap: 1.5rem;
+
+  &__input {
+    flex-grow: 6;
+
+    padding: 1rem 1.5rem;
+
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: v.$color-text;
+
+    @extend %borderAndBoxShadow;
+
+    background-color: v.$color-white;
+
+    &::placeholder {
+      color: v.$color-gray;
+    }
+  }
+
+  &__btn {
+    flex-grow: 2;
+
+    padding: 1rem 1.5rem;
+
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: v.$color-white;
+
+    @extend %borderAndBoxShadow;
+
+    background-color: v.$color-black;
+    transition: background-color 0.2s linear;
+
+    &:hover {
+      background-color: v.$color-text;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+
+  &__item {
+    padding: 1.5rem;
+
+    @extend %borderAndBoxShadow;
+    background-color: v.$color-white;
+  }
+}

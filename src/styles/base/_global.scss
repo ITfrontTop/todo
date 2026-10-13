@@ -1,3 +1,19 @@
+@use '../abstracts/variables' as v;
+
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 400px;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 43.75rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
 }

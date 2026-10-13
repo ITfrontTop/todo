@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>todo</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,12 +21,32 @@
   <body>
     <section class="main">
       <div class="container">
-        <h1 class="title">My Tasks</h1>
-        <div class="add">
-          <input id="input-text" type="text" data-input-text />
-          <button>+ Add</button>
+        <div class="main__wrapper">
+          <h1 class="title">My Tasks</h1>
+          <div class="add">
+            <input
+              class="add__input"
+              id="input-text"
+              type="text"
+              data-input-text
+              placeholder="Type your task here.."
+            />
+            <button class="add__btn">+ Add</button>
+          </div>
+          <div class="content">
+            <div class="content__item">
+              <p class="content__text">Learn React</p>
+            </div>
+            <div class="content__item">
+              <p class="content__text">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Et
+                repellendus laboriosam nobis voluptate corporis tempore vel,
+                suscipit, tenetur dolore illum enim voluptatem cum vitae rerum
+                architecto? Magni dolorem commodi laborum?
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="content"></div>
       </div>
     </section>
   </body>
