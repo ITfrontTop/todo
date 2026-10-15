@@ -70,6 +70,8 @@
     background-color: v.$color-black;
     transition: background-color 0.2s linear;
 
+    cursor: pointer;
+
     &:hover {
       background-color: v.$color-text;
     }
@@ -89,6 +91,7 @@
     padding: 0 0.5rem;
 
     border-right: 1px solid v.$color-text-light;
+    cursor: pointer;
 
     &:last-child {
       border-right: none;
@@ -116,6 +119,10 @@
 
     @extend %borderAndBoxShadow;
     background-color: v.$color-white;
+  }
+
+  &__checkbox {
+    cursor: pointer;
   }
 
   &__text {
