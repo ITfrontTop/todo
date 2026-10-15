@@ -122,7 +122,14 @@
   }
 
   &__checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
     cursor: pointer;
+  }
+
+  &__checkbox-icon {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &__text {
