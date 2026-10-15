@@ -46,4 +46,4 @@ addBtn.addEventListener('click', () => {
   inputTodo.value = '';
 });
 
-// продовжити з svg button
+// продовжити з svg button добавить
