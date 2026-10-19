@@ -1,67 +1,86 @@
-// const inputTodo = document.querySelector('.add__input');
-// const addBtn = document.querySelector('.add__btn');
-// const itemList = document.querySelector('.content');
-
-// const dataTodo = [];
-
-// const createElementTodo = (tegName, tegClass) => {
-//   const item = document.createElement(tegName);
-//   item.classList.add(tegClass);
-
-//   return item;
-// };
-
-// addBtn.addEventListener('click', () => {
-//   dataTodo.push(inputTodo.value);
-//   console.log(dataTodo);
-
-//   const item = createElementTodo('div', 'content__item');
-//   const checkboxItem = createElementTodo('div', 'content__checkbox');
-//   const labelText = createElementTodo('p', 'content__text');
-
-//   const btnWrapper = createElementTodo('div', 'button__wrapper');
-//   const btnEdit = createElementTodo('button', 'button__edit');
-//   const btnDelete = createElementTodo('button', 'button__delete');
-
-//   btnEdit.innerHTML = `
-//     <svg class="button__icon">
-//       <use href="src/assets/icons/sprites.svg#edit-icon"></use>
-//     </svg>
-//   `;
-
-//   btnDelete.innerHTML = `
-//     <svg class="button__icon">
-//       <use href="src/assets/icons/sprites.svg#delete-icon"></use>
-//     </svg>
-//   `;
-
-//   labelText.textContent = inputTodo.value;
-//   console.log(labelText.textContent);
-
-//   itemList.append(item);
-
-//   item.append(checkboxItem);
-//   item.append(labelText);
-//   item.append(btnWrapper);
-
-//   // added button
-//   btnWrapper.append(btnEdit);
-//   btnWrapper.append(btnDelete);
-
-//   // clean input
-//   inputTodo.value = '';
-//   render();
-// });
-
-// const render = () => {
-//   dataTodo.forEach((todo) => {});
-// };
-
-const input = document.querySelector('[data-input-field]');
+const input = document.querySelector('[data-text-field]');
 const addTodoBtn = document.querySelector('[data-add-todo-btn]');
 const container = document.querySelector('[data-todo-container]');
 
-addTodoBtn.addEventListener('click', () => {
+const todoList = JSON.parse(localStorage.getItem('todos')) || [];
+
+const saveToLocalStorage = (key = 'todos') => {
+  localStorage.setItem('todos', JSON.stringify(todoList));
+};
+
+const addTodoItem = () => {
   if (input.value.trim()) {
+    // added in todoList
+    todoList.push(input.value);
+    input.value = '';
+
+    saveToLocalStorage();
+    render();
+  }
+};
+
+addTodoBtn.addEventListener('click', addTodoItem);
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    addTodoItem();
   }
 });
+
+const removeTodo = (index) => {
+  todoList.splice(index, 1);
+  saveToLocalStorage();
+  render();
+};
+
+const render = () => {
+  container.innerHTML = '';
+
+  if (todoList.length === 0) {
+    const messageEnterText = document.createElement('h3');
+    messageEnterText.classList.add('content__message');
+    messageEnterText.textContent = 'Enter your tasks!';
+
+    container.append(messageEnterText);
+  }
+
+  todoList.forEach((todo, index) => {
+    // added container item
+    const todoWrapper = document.createElement('div');
+    todoWrapper.classList.add('content__item');
+
+    // create todo text
+    const todoText = document.createElement('p');
+    todoText.classList.add('content__text');
+    todoText.textContent = todo;
+
+    // create buttons
+    const buttonWrapper = document.createElement('div');
+    buttonWrapper.classList.add('button__wrapper');
+    const buttonEdit = document.createElement('button');
+    buttonEdit.classList.add('button__edit');
+    buttonEdit.innerHTML = `
+      <svg class="button__icon">
+        <use href="src/assets/icons/sprites.svg#edit-icon"></use>
+      </svg>
+    `;
+    const buttonDelete = document.createElement('button');
+    buttonDelete.classList.add('button__delete');
+    buttonDelete.innerHTML = `
+      <svg class="button__icon">
+        <use href="src/assets/icons/sprites.svg#delete-icon"></use>
+      </svg>
+    `;
+
+    buttonDelete.addEventListener('click', (index) => removeTodo(index));
+
+    container.append(todoWrapper);
+    todoWrapper.append(todoText);
+
+    // added buttons
+    todoWrapper.append(buttonWrapper);
+    buttonWrapper.append(buttonEdit);
+    buttonWrapper.append(buttonDelete);
+  });
+};
+
+render();
