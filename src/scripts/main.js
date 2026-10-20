@@ -91,6 +91,7 @@
 const input = document.querySelector('[data-text-field]');
 const addTodoBtn = document.querySelector('[data-add-todo-btn]');
 const container = document.querySelector('[data-todo-container]');
+const countTodo = document.querySelector('[data-count-todo]');
 
 const todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
@@ -105,6 +106,18 @@ const createElementTodo = (element, elementClass) => {
 
 const saveToLocalStorage = (key = 'todos') => {
   localStorage.setItem(key, JSON.stringify(todoList));
+};
+
+const counterTodo = () => {
+  const countNumber = todoList.reduce((acc, item) => {
+    if (!item.completed) acc += 1;
+
+    return acc;
+  }, 0);
+
+  countNumber > 0
+    ? (countTodo.textContent = `${countNumber} tasks left`)
+    : (countTodo.textContent = 'no tasks left');
 };
 
 const addTodoItem = () => {
@@ -210,6 +223,8 @@ const render = () => {
       completedTodo(todoCheckbox, todoText, todo)
     );
 
+    // added count
+
     container.append(todoWrapper);
     todoWrapper.append(todoCheckbox);
     todoWrapper.append(todoText);
@@ -219,6 +234,8 @@ const render = () => {
     buttonWrapper.append(buttonEdit);
     buttonWrapper.append(buttonDelete);
   });
+
+  counterTodo();
 };
 
 render();
