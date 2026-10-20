@@ -6,7 +6,7 @@
 .main {
   padding: 5rem 0;
 
-  height: 100vh;
+  min-height: 100vh;
 
   background-color: v.$color-bg-light;
 
@@ -90,6 +90,8 @@
   &__item {
     padding: 0 0.5rem;
 
+    color: v.$color-text-light;
+
     border-right: 1px solid v.$color-text-light;
     cursor: pointer;
 
@@ -138,6 +140,11 @@
     font-size: 1.5rem;
     line-height: 1.5;
     color: v.$color-text;
+
+    &.completed {
+      text-decoration: line-through;
+      color: v.$color-text-light;
+    }
   }
 
   &__message {
@@ -170,6 +177,15 @@
     background: transparent;
     border: none;
     cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+
+      .button__icon {
+        // проверить
+        stroke: v.$color-text-light;
+      }
+    }
   }
 
   &__icon {
