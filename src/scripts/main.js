@@ -104,8 +104,13 @@ const createElementTodo = (element, elementClass) => {
   return item;
 };
 
-const saveToLocalStorage = (key = 'todos') => {
-  localStorage.setItem(key, JSON.stringify(todoList));
+// можна оставить для универсальности
+// const saveToLocalStorage = (key = 'todos') => {
+//   localStorage.setItem(key, JSON.stringify(todoList));
+// };
+
+const saveToLocalStorage = () => {
+  localStorage.setItem('todos', JSON.stringify(todoList));
 };
 
 const counterTodo = () => {
