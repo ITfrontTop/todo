@@ -214,6 +214,42 @@ const render = () => {
       buttonEdit.disabled = false;
     }
 
+    // edit todo
+    buttonEdit.addEventListener('click', () => {
+      console.log(todo.text);
+
+      todoText.style.display = 'none';
+      todoCheckbox.style.display = 'none';
+      buttonEdit.style.display = 'none';
+
+      const todoInputTextEdit = createElementTodo('input', 'content__text');
+      todoInputTextEdit.type = 'text';
+
+      const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
+      buttonSaveEdit.textContent = 'Save';
+
+      // save (доробить сохранения)
+      buttonSaveEdit.addEventListener('click', () => {
+        if (todoInputTextEdit) {
+          // переделать
+          todoText.style.display = 'flex';
+          todoCheckbox.style.display = 'flex';
+          buttonEdit.style.display = 'flex';
+
+          todo.text = todoInputTextEdit.value;
+        } else {
+          // доробить щоб показало message когда input редактирования пустой
+        }
+
+        saveToLocalStorage();
+        render();
+      });
+
+      todoWrapper.prepend(todoInputTextEdit);
+      todoInputTextEdit.value = todo.text;
+      todoInputTextEdit.after(buttonSaveEdit);
+    });
+
     const buttonDelete = createElementTodo('button', 'button__delete');
 
     buttonDelete.innerHTML = `

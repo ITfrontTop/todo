@@ -164,6 +164,17 @@
     gap: 1.75rem;
   }
 
+  &__save-edit {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: v.$color-white;
+
+    background-color: v.$color-black;
+
+    border-radius: 0.75rem;
+    padding: 0.4rem 1.5rem;
+  }
+
   &__edit,
   &__delete {
     width: 1.5rem;
