@@ -230,7 +230,7 @@ const render = () => {
 
       // save (доробить сохранения)
       buttonSaveEdit.addEventListener('click', () => {
-        if (todoInputTextEdit) {
+        if (todoInputTextEdit.value.trim()) {
           // переделать
           todoText.style.display = 'flex';
           todoCheckbox.style.display = 'flex';
@@ -238,11 +238,11 @@ const render = () => {
 
           todo.text = todoInputTextEdit.value;
         } else {
-          // доробить щоб показало message когда input редактирования пустой
+          todo.text;
         }
 
-        saveToLocalStorage();
         render();
+        saveToLocalStorage();
       });
 
       todoWrapper.prepend(todoInputTextEdit);
@@ -260,7 +260,7 @@ const render = () => {
 
     buttonDelete.addEventListener('click', () => removeTodo(index));
 
-    todoCheckbox.addEventListener('click', () =>
+    todoCheckbox.addEventListener('change', () =>
       completedTodo(todoCheckbox, todoText, todo)
     );
 
