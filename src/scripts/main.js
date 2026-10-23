@@ -128,9 +128,13 @@ const counterTodo = () => {
 const addTodoItem = () => {
   if (input.value.trim()) {
     // added in todoList
+
+    // const textInput = input.value.replace(/ {1,}/g, ' ');
+    // console.log(textInput);
+
     todoList.push({
       id: generateID(),
-      text: input.value,
+      text: input.value.replace(/ {1,}/g, ' '),
       completed: false
     });
 
@@ -216,8 +220,6 @@ const render = () => {
 
     // edit todo
     buttonEdit.addEventListener('click', () => {
-      console.log(todo.text);
-
       todoText.style.display = 'none';
       todoCheckbox.style.display = 'none';
       buttonEdit.style.display = 'none';
@@ -236,9 +238,9 @@ const render = () => {
           todoCheckbox.style.display = 'flex';
           buttonEdit.style.display = 'flex';
 
-          todo.text = todoInputTextEdit.value;
+          todo.text = todoInputTextEdit.value.replace(/ {1,}/g, ' ');
         } else {
-          todo.text;
+          todo.text = todo.text.trim();
         }
 
         render();
