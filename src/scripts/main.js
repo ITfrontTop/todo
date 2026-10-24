@@ -34,13 +34,15 @@ const addTodoItem = () => {
   if (input.value.trim()) {
     todoList.push({
       id: generateID(),
-      text: input.value.replace(/ {1,}/g, ' '),
+      text: input.value.trim().replace(/\s+/g, ' '),
       completed: false
     });
 
+    console.log(todoList);
     input.value = '';
 
     saveToLocalStorage();
+    counterTodo();
     render();
   }
 };
@@ -51,6 +53,9 @@ const completedTodo = (todoCheckbox, todoText, todo) => {
   todoCheckbox.checked ? (todo.completed = true) : (todo.completed = false);
 
   saveToLocalStorage();
+
+  // change count
+  counterTodo();
   // render();
 };
 
@@ -64,6 +69,7 @@ input.addEventListener('keydown', (e) => {
 const removeTodo = (index) => {
   todoList.splice(index, 1);
   saveToLocalStorage();
+  counterTodo();
   render();
 };
 
@@ -131,9 +137,10 @@ const render = () => {
           todoCheckbox.style.display = 'flex';
           buttonEdit.style.display = 'flex';
 
-          todo.text = todoInputTextEdit.value.replace(/ {1,}/g, ' ');
+          todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
         } else {
-          todo.text = todo.text.trim();
+          alert('You cannot save empty text! Please, write your tasks');
+          todo.text = todo.text.trim().replace(/\s+/g, ' ');
         }
 
         render();
@@ -170,7 +177,7 @@ const render = () => {
     buttonWrapper.append(buttonDelete);
   });
 
-  counterTodo();
+  // counterTodo();
 };
 
 render();
