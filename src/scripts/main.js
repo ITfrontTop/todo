@@ -64,8 +64,16 @@ input.addEventListener('keydown', (e) => {
   }
 });
 
-const removeTodo = (index) => {
-  todoList.splice(index, 1);
+// const removeTodo = (index) => {
+//   todoList.splice(index, 1);
+//   saveToLocalStorage();
+//   counterTodo();
+//   render();
+// };
+
+const removeTodo = (id) => {
+  const element = todoList.find((el) => el.id === id);
+  todoList.splice(todoList.indexOf(element), 1);
   saveToLocalStorage();
   counterTodo();
   render();
@@ -116,11 +124,11 @@ const filteredTasks = (state) => {
   return todoList.filter((el) => {
     switch (state) {
       case 'all':
-        return el;
+        return true;
       case 'active':
-        return el.completed === false;
+        return !el.completed;
       case 'completed':
-        return el.completed === true;
+        return el.completed;
     }
   });
 };
@@ -235,7 +243,8 @@ const render = () => {
       </svg>
     `;
 
-    buttonDelete.addEventListener('click', () => removeTodo(index));
+    // buttonDelete.addEventListener('click', () => removeTodo(index));
+    buttonDelete.addEventListener('click', () => removeTodo(todo.id));
 
     todoCheckbox.addEventListener('change', () =>
       completedTodo(todoCheckbox, todoText, todo)
@@ -251,8 +260,7 @@ const render = () => {
     buttonWrapper.append(buttonEdit);
     buttonWrapper.append(buttonDelete);
   });
-
-  // counterTodo();
 };
 
 render();
+counterTodo();
