@@ -54,6 +54,7 @@ const completedTodo = (todoCheckbox, todoText, todo) => {
 
   saveToLocalStorage();
   counterTodo();
+  render();
 };
 
 addTodoBtn.addEventListener('click', addTodoItem);
@@ -91,21 +92,24 @@ btnAll.addEventListener('click', () => {
   removeAddClassActiveArray(categoryListButton, btnAll);
   stateTodo = 'all';
   // filteredTasks(stateTodo);
-  console.log(filteredTasks(stateTodo));
+  // console.log(filteredTasks(stateTodo));
+  render();
 });
 
 btnActive.addEventListener('click', () => {
   removeAddClassActiveArray(categoryListButton, btnActive);
   stateTodo = 'active';
   // filteredTasks(stateTodo);
-  console.log(filteredTasks(stateTodo));
+  // console.log(filteredTasks(stateTodo));
+  render();
 });
 
 btnCompleted.addEventListener('click', () => {
   removeAddClassActiveArray(categoryListButton, btnCompleted);
   stateTodo = 'completed';
   // filteredTasks(stateTodo);
-  console.log(filteredTasks(stateTodo));
+  // console.log(filteredTasks(stateTodo));
+  render();
 });
 
 const filteredTasks = (state) => {
@@ -125,14 +129,36 @@ const filteredTasks = (state) => {
 const render = () => {
   container.innerHTML = '';
 
-  if (todoList.length === 0) {
+  // if (todoList.length === 0) {
+  //   const messageEnterText = createElementTodo('h3', 'content__message');
+  //   messageEnterText.textContent = 'Enter your tasks!';
+
+  //   container.append(messageEnterText);
+  // }
+
+  // added tasks state
+  const renderTasks = filteredTasks(stateTodo);
+
+  if (renderTasks.length === 0) {
     const messageEnterText = createElementTodo('h3', 'content__message');
-    messageEnterText.textContent = 'Enter your tasks!';
+
+    switch (stateTodo) {
+      case 'all':
+        messageEnterText.textContent = 'Enter your tasks!';
+        break;
+      case 'active':
+        messageEnterText.textContent = 'No active tasks!';
+        break;
+      case 'completed':
+        messageEnterText.textContent = 'No completed tasks! Do something!';
+    }
+
+    // messageEnterText.textContent = 'Enter your tasks!';
 
     container.append(messageEnterText);
   }
 
-  todoList.forEach((todo, index) => {
+  renderTasks.forEach((todo, index) => {
     // added container item
     const todoWrapper = createElementTodo('div', 'content__item');
 
