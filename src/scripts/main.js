@@ -72,8 +72,15 @@ input.addEventListener('keydown', (e) => {
 // };
 
 const removeTodo = (id) => {
-  const element = todoList.find((el) => el.id === id);
-  todoList.splice(todoList.indexOf(element), 1);
+  const element = todoList.findIndex((el) => el.id === id);
+  console.log(element);
+
+  if (element < 0) {
+    alert('Your task is not found!');
+    return;
+  }
+
+  todoList.splice(element, 1);
   saveToLocalStorage();
   counterTodo();
   render();
