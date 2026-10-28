@@ -3,6 +3,15 @@ const addTodoBtn = document.querySelector('[data-add-todo-btn]');
 const container = document.querySelector('[data-todo-container]');
 const countTodo = document.querySelector('[data-count-todo]');
 
+// category !!!!!!!!!!!!!!!!!!!!!!!!
+const categoryListButton = document.querySelectorAll('.count__item');
+const btnAll = document.querySelector('[data-category-all]');
+const btnActive = document.querySelector('[data-category-active]');
+const btnCompleted = document.querySelector('[data-category-completed]');
+
+// category change counter
+let stateTodo = 'all';
+
 const todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
 const generateID = () => new Date().getTime();
@@ -86,16 +95,6 @@ const removeTodo = (id) => {
   render();
 };
 
-// category !!!!!!!!!!!!!!!!!!!!!!!!
-const categoryListButton = document.querySelectorAll('.count__item');
-console.log(categoryListButton);
-
-const btnAll = document.querySelector('[data-category-all]');
-const btnActive = document.querySelector('[data-category-active]');
-const btnCompleted = document.querySelector('[data-category-completed]');
-
-let stateTodo = 'all';
-
 const removeAddClassActiveArray = (array, item) => {
   array.forEach((el) => {
     el.classList.remove('active');
@@ -103,29 +102,23 @@ const removeAddClassActiveArray = (array, item) => {
   item.classList.add('active');
 };
 
-btnAll.addEventListener('click', () => {
-  removeAddClassActiveArray(categoryListButton, btnAll);
-  stateTodo = 'all';
-  // filteredTasks(stateTodo);
-  // console.log(filteredTasks(stateTodo));
-  render();
-});
+// btnAll.addEventListener('click', () => {
+//   removeAddClassActiveArray(categoryListButton, btnAll);
+//   stateTodo = 'all';
+//   render();
+// });
 
-btnActive.addEventListener('click', () => {
-  removeAddClassActiveArray(categoryListButton, btnActive);
-  stateTodo = 'active';
-  // filteredTasks(stateTodo);
-  // console.log(filteredTasks(stateTodo));
-  render();
-});
+// btnActive.addEventListener('click', () => {
+//   removeAddClassActiveArray(categoryListButton, btnActive);
+//   stateTodo = 'active';
+//   render();
+// });
 
-btnCompleted.addEventListener('click', () => {
-  removeAddClassActiveArray(categoryListButton, btnCompleted);
-  stateTodo = 'completed';
-  // filteredTasks(stateTodo);
-  // console.log(filteredTasks(stateTodo));
-  render();
-});
+// btnCompleted.addEventListener('click', () => {
+//   removeAddClassActiveArray(categoryListButton, btnCompleted);
+//   stateTodo = 'completed';
+//   render();
+// });
 
 const filteredTasks = (state) => {
   return todoList.filter((el) => {
@@ -140,7 +133,7 @@ const filteredTasks = (state) => {
   });
 };
 
-// !!!!!!!!!!!!!!!!!!!
+// ----------------- main render function ---------------------
 const render = () => {
   container.innerHTML = '';
 
@@ -220,6 +213,13 @@ const render = () => {
       const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
       buttonSaveEdit.textContent = 'Save';
 
+      // press Escape cancel edit input text
+      todoInputTextEdit.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          render();
+        }
+      });
+
       // save
       buttonSaveEdit.addEventListener('click', () => {
         if (todoInputTextEdit.value.trim()) {
@@ -268,6 +268,24 @@ const render = () => {
     buttonWrapper.append(buttonDelete);
   });
 };
+
+const changeCategoryState = (state, btn) => {
+  removeAddClassActiveArray(categoryListButton, btn);
+  stateTodo = state;
+  render();
+};
+
+btnAll.addEventListener('click', () => {
+  changeCategoryState('all', btnAll);
+});
+
+btnActive.addEventListener('click', () => {
+  changeCategoryState('active', btnActive);
+});
+
+btnCompleted.addEventListener('click', () => {
+  changeCategoryState('completed', btnCompleted);
+});
 
 render();
 counterTodo();
