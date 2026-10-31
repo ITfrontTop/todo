@@ -442,8 +442,6 @@ const render = () => {
         messageEnterText.textContent = 'No completed tasks! Do something!';
     }
 
-    // messageEnterText.textContent = 'Enter your tasks!';
-
     container.append(messageEnterText);
   }
 
@@ -490,46 +488,81 @@ const render = () => {
 
     // edit todo
     buttonEdit.addEventListener('click', () => {
+      const isEditing = todo.edit;
+      console.log(isEditing);
+
       todoList.forEach((el) => {
         if (el.id !== todo.id) {
           el.edit = false;
         } else {
-          el.edit = true;
+          el.edit = !isEditing;
         }
       });
 
-      console.log(todo);
+      if (todo.edit) {
+        changeEditView('none');
 
-      changeEditView('none');
+        const todoInputTextEdit = createElementTodo('input', 'content__text');
+        todoInputTextEdit.type = 'text';
 
-      const todoInputTextEdit = createElementTodo('input', 'content__text');
-      todoInputTextEdit.type = 'text';
+        const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
+        buttonSaveEdit.textContent = 'Save';
 
-      const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
-      buttonSaveEdit.textContent = 'Save';
+        // press Escape cancel edit input text
+        todoInputTextEdit.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' || e.key === 'Esc') {
+            render();
+          }
+        });
 
-      // press Escape cancel edit input text
-      todoInputTextEdit.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' || e.key === 'Esc') {
-          render();
-        }
-      });
+        // save
+        buttonSaveEdit.addEventListener('click', () => {
+          if (todoInputTextEdit.value.trim()) {
+            todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
+            render();
+          } else {
+            alert('You cannot save empty text! Please, write your tasks');
+            return;
+          }
+          saveToLocalStorage();
+        });
 
-      // save
-      buttonSaveEdit.addEventListener('click', () => {
-        if (todoInputTextEdit.value.trim()) {
-          todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
-          render();
-        } else {
-          alert('You cannot save empty text! Please, write your tasks');
-          return;
-        }
-        saveToLocalStorage();
-      });
+        todoWrapper.prepend(todoInputTextEdit);
+        todoInputTextEdit.value = todo.text;
+        todoInputTextEdit.after(buttonSaveEdit);
+      }
+      // console.log(todo.edit, todo);
 
-      todoWrapper.prepend(todoInputTextEdit);
-      todoInputTextEdit.value = todo.text;
-      todoInputTextEdit.after(buttonSaveEdit);
+      // changeEditView('none');
+
+      // const todoInputTextEdit = createElementTodo('input', 'content__text');
+      // todoInputTextEdit.type = 'text';
+
+      // const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
+      // buttonSaveEdit.textContent = 'Save';
+
+      // // press Escape cancel edit input text
+      // todoInputTextEdit.addEventListener('keydown', (e) => {
+      //   if (e.key === 'Escape' || e.key === 'Esc') {
+      //     render();
+      //   }
+      // });
+
+      // // save
+      // buttonSaveEdit.addEventListener('click', () => {
+      //   if (todoInputTextEdit.value.trim()) {
+      //     todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
+      //     render();
+      //   } else {
+      //     alert('You cannot save empty text! Please, write your tasks');
+      //     return;
+      //   }
+      //   saveToLocalStorage();
+      // });
+
+      // todoWrapper.prepend(todoInputTextEdit);
+      // todoInputTextEdit.value = todo.text;
+      // todoInputTextEdit.after(buttonSaveEdit);
 
       // alert('Please finish change prev task!');
     });
