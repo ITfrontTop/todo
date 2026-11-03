@@ -292,6 +292,11 @@ const todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
 const generateID = () => crypto.randomUUID();
 
+const updateUI = () => {
+  counterTodo();
+  render();
+};
+
 const createElementTodo = (element, elementClass) => {
   const item = document.createElement(element);
   item.classList.add(elementClass);
@@ -326,8 +331,7 @@ const addTodoItem = () => {
     input.value = '';
 
     saveToLocalStorage();
-    counterTodo();
-    render();
+    updateUI();
   }
 };
 
@@ -335,8 +339,7 @@ const completedTodo = (todoCheckbox, todo) => {
   todo.completed = todoCheckbox.checked;
 
   saveToLocalStorage();
-  counterTodo();
-  render();
+  updateUI();
 };
 
 addTodoBtn.addEventListener('click', addTodoItem);
@@ -347,19 +350,19 @@ input.addEventListener('keydown', (e) => {
 });
 
 const removeTodo = (id) => {
-  const element = todoList.findIndex((el) => el.id === id);
+  const todoIndex = todoList.findIndex((el) => el.id === id);
 
-  if (element < 0) {
+  if (todoIndex < 0) {
     alert('Your task is not found!');
     return;
   }
 
-  todoList.splice(element, 1);
-  editingTodoId = null;
+  todoList.splice(todoIndex, 1);
+
+  if (id === editingTodoId) editingTodoId = null;
 
   saveToLocalStorage();
-  counterTodo();
-  render();
+  updateUI();
 };
 
 const removeAddClassActiveArray = (array, item) => {
@@ -450,7 +453,7 @@ const render = () => {
       todoInputTextEdit.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' || e.key === 'Esc') {
           editingTodoId = null;
-          render();
+          updateUI();
         }
       });
 
@@ -460,7 +463,7 @@ const render = () => {
           todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
           editingTodoId = null;
           saveToLocalStorage();
-          render();
+          updateUI();
         } else {
           alert('You cannot save empty text! Please, write your tasks');
           return;
@@ -516,7 +519,7 @@ const changeCategoryState = (state, btn) => {
   removeAddClassActiveArray(categoryListButton, btn);
   stateTodo = state;
   editingTodoId = null;
-  render();
+  updateUI();
 };
 
 btnAll.addEventListener('click', () => {
@@ -531,5 +534,4 @@ btnCompleted.addEventListener('click', () => {
   changeCategoryState('completed', btnCompleted);
 });
 
-render();
-counterTodo();
+updateUI();
