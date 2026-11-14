@@ -12,9 +12,17 @@
 // // category change counter
 // let stateTodo = 'all';
 
+// // edit state variable
+// let editingTodoId = null;
+
 // const todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
-// const generateID = () => new Date().getTime();
+// const generateID = () => crypto.randomUUID();
+
+// const updateUI = () => {
+//   counterTodo();
+//   render();
+// };
 
 // const createElementTodo = (element, elementClass) => {
 //   const item = document.createElement(element);
@@ -44,23 +52,21 @@
 //     todoList.push({
 //       id: generateID(),
 //       text: input.value.trim().replace(/\s+/g, ' '),
-//       completed: false,
-//       edit: false
+//       completed: false
 //     });
 
 //     input.value = '';
 
 //     saveToLocalStorage();
-//     counterTodo();
-//     render();
+//     updateUI();
 //   }
 // };
 
 // const completedTodo = (todoCheckbox, todo) => {
 //   todo.completed = todoCheckbox.checked;
+
 //   saveToLocalStorage();
-//   counterTodo();
-//   render();
+//   updateUI();
 // };
 
 // addTodoBtn.addEventListener('click', addTodoItem);
@@ -71,17 +77,19 @@
 // });
 
 // const removeTodo = (id) => {
-//   const element = todoList.findIndex((el) => el.id === id);
+//   const todoIndex = todoList.findIndex((el) => el.id === id);
 
-//   if (element < 0) {
+//   if (todoIndex < 0) {
 //     alert('Your task is not found!');
 //     return;
 //   }
 
-//   todoList.splice(element, 1);
+//   todoList.splice(todoIndex, 1);
+
+//   if (id === editingTodoId) editingTodoId = null;
+
 //   saveToLocalStorage();
-//   counterTodo();
-//   render();
+//   updateUI();
 // };
 
 // const removeAddClassActiveArray = (array, item) => {
@@ -103,6 +111,10 @@
 //     }
 //   });
 // };
+
+// // container.addEventListener('click', (e) => {
+// //   console.log(e.target);
+// // });
 
 // // ----------------- main render function ---------------------
 // const render = () => {
@@ -159,11 +171,7 @@
 //     `;
 
 //     // disable edit btn
-//     if (todo.completed) {
-//       buttonEdit.disabled = true;
-//     } else {
-//       buttonEdit.disabled = false;
-//     }
+//     buttonEdit.disabled = todo.completed;
 
 //     const todoCreateEditElement = () => {
 //       const todoInputTextEdit = createElementTodo('input', 'content__text');
@@ -175,8 +183,8 @@
 //       // press Escape cancel edit input text
 //       todoInputTextEdit.addEventListener('keydown', (e) => {
 //         if (e.key === 'Escape' || e.key === 'Esc') {
-//           todo.edit = false;
-//           render();
+//           editingTodoId = null;
+//           updateUI();
 //         }
 //       });
 
@@ -184,15 +192,13 @@
 //       buttonSaveEdit.addEventListener('click', () => {
 //         if (todoInputTextEdit.value.trim()) {
 //           todo.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
-//           todo.edit = false;
+//           editingTodoId = null;
 //           saveToLocalStorage();
-//           render();
+//           updateUI();
 //         } else {
 //           alert('You cannot save empty text! Please, write your tasks');
 //           return;
 //         }
-
-//         // saveToLocalStorage();
 //       });
 
 //       todoWrapper.prepend(todoInputTextEdit);
@@ -227,19 +233,12 @@
 
 //     // edit todo
 //     buttonEdit.addEventListener('click', () => {
-//       const isEditing = todo.edit;
+//       editingTodoId = todo.id;
 
-//       todoList.forEach((el) => {
-//         if (el.id !== todo.id) {
-//           el.edit = false;
-//         } else {
-//           el.edit = !isEditing;
-//         }
-//       });
 //       render();
 //     });
 
-//     if (todo.edit) {
+//     if (editingTodoId === todo.id) {
 //       todoCreateEditElement();
 //     } else {
 //       todoCreateDefaultElement();
@@ -250,10 +249,8 @@
 // const changeCategoryState = (state, btn) => {
 //   removeAddClassActiveArray(categoryListButton, btn);
 //   stateTodo = state;
-//   todoList.forEach((el) => {
-//     el.edit = false;
-//   });
-//   render();
+//   editingTodoId = null;
+//   updateUI();
 // };
 
 // btnAll.addEventListener('click', () => {
@@ -268,8 +265,7 @@
 //   changeCategoryState('completed', btnCompleted);
 // });
 
-// render();
-// counterTodo();
+// updateUI();
 
 const input = document.querySelector('[data-text-field]');
 const addTodoBtn = document.querySelector('[data-add-todo-btn]');
@@ -296,6 +292,26 @@ const updateUI = () => {
   counterTodo();
   render();
 };
+
+// --------- event delegation (delete) --------
+container.addEventListener('click', (e) => {
+  const deleteBtn = e.target.closest('.button__delete');
+  const editBtn = e.target.closest('.button__edit');
+
+  if (deleteBtn) {
+    const todoItemContainer = deleteBtn.closest('.content__item');
+    if (!todoItemContainer) return;
+
+    const todoId = todoItemContainer.dataset.id;
+    removeTodo(todoId);
+  }
+
+  if (editBtn) {
+    const todoId = todoItemContainer.dataset.id;
+    editingTodoId = todoId;
+    render();
+  }
+});
 
 const createElementTodo = (element, elementClass) => {
   const item = document.createElement(element);
@@ -385,6 +401,10 @@ const filteredTasks = (state) => {
   });
 };
 
+// container.addEventListener('click', (e) => {
+//   console.log(e.target);
+// });
+
 // ----------------- main render function ---------------------
 const render = () => {
   container.innerHTML = '';
@@ -412,7 +432,8 @@ const render = () => {
   renderTasks.forEach((todo) => {
     // added container item
     const todoWrapper = createElementTodo('div', 'content__item');
-
+    // added data-id
+    todoWrapper.dataset.id = todo.id;
     container.append(todoWrapper);
 
     // added checkbox
@@ -432,6 +453,7 @@ const render = () => {
     // create buttons
     const buttonWrapper = createElementTodo('div', 'button__wrapper');
     const buttonEdit = createElementTodo('button', 'button__edit');
+    buttonEdit.dataset.action = 'edit';
 
     buttonEdit.innerHTML = `
       <svg class="button__icon">
@@ -477,14 +499,13 @@ const render = () => {
 
     const todoCreateDefaultElement = () => {
       const buttonDelete = createElementTodo('button', 'button__delete');
+      buttonDelete.dataset.action = 'delete';
 
       buttonDelete.innerHTML = `
       <svg class="button__icon">
         <use href="src/assets/icons/sprites.svg#delete-icon"></use>
       </svg>
     `;
-
-      buttonDelete.addEventListener('click', () => removeTodo(todo.id));
 
       todoCheckbox.addEventListener('change', () =>
         completedTodo(todoCheckbox, todo)
@@ -501,11 +522,11 @@ const render = () => {
     };
 
     // edit todo
-    buttonEdit.addEventListener('click', () => {
-      editingTodoId = todo.id;
+    // buttonEdit.addEventListener('click', () => {
+    //   editingTodoId = todo.id;
 
-      render();
-    });
+    //   render();
+    // });
 
     if (editingTodoId === todo.id) {
       todoCreateEditElement();
