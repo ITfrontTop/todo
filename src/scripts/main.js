@@ -307,6 +307,9 @@ container.addEventListener('click', (e) => {
   }
 
   if (editBtn) {
+    const todoItemContainer = editBtn.closest('.content__item');
+    if (!todoItemContainer) return;
+
     const todoId = todoItemContainer.dataset.id;
     editingTodoId = todoId;
     render();
@@ -400,10 +403,6 @@ const filteredTasks = (state) => {
     }
   });
 };
-
-// container.addEventListener('click', (e) => {
-//   console.log(e.target);
-// });
 
 // ----------------- main render function ---------------------
 const render = () => {
