@@ -293,27 +293,30 @@ const updateUI = () => {
   render();
 };
 
-// --------- event delegation (delete) --------
+// --------- event delegation (delete, edit, save) ----------
 container.addEventListener('click', (e) => {
   const deleteBtn = e.target.closest('.button__delete');
   const editBtn = e.target.closest('.button__edit');
+  const saveBtn = e.target.closest('.button__save-edit');
 
-  if (deleteBtn) {
-    const todoItemContainer = deleteBtn.closest('.content__item');
+  if (deleteBtn || editBtn || saveBtn) {
+    // data-id container
+    const todoItemContainer = e.target.closest('.content__item');
     if (!todoItemContainer) return;
-
     const todoId = todoItemContainer.dataset.id;
-    removeTodo(todoId);
+
+    if (deleteBtn) {
+      removeTodo(todoId);
+    }
+
+    if (editBtn) {
+      editingTodoId = todoId;
+      render();
+    }
   }
 
-  if (editBtn) {
-    const todoItemContainer = editBtn.closest('.content__item');
-    if (!todoItemContainer) return;
-
-    const todoId = todoItemContainer.dataset.id;
-    editingTodoId = todoId;
-    render();
-  }
+  // if (saveBtn) {
+  // }
 });
 
 const createElementTodo = (element, elementClass) => {
@@ -519,13 +522,6 @@ const render = () => {
       buttonWrapper.append(buttonEdit);
       buttonWrapper.append(buttonDelete);
     };
-
-    // edit todo
-    // buttonEdit.addEventListener('click', () => {
-    //   editingTodoId = todo.id;
-
-    //   render();
-    // });
 
     if (editingTodoId === todo.id) {
       todoCreateEditElement();
