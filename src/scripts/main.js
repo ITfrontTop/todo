@@ -315,8 +315,12 @@ container.addEventListener('click', (e) => {
     }
   }
 
-  // if (saveBtn) {
-  // }
+  if (saveBtn) {
+    const todoInputTextEdit = saveBtn.previousElementSibling;
+    console.log(todoInputTextEdit);
+
+    // ----------------- finishing -------------------
+  }
 });
 
 const createElementTodo = (element, elementClass) => {
@@ -468,6 +472,7 @@ const render = () => {
 
     const todoCreateEditElement = () => {
       const todoInputTextEdit = createElementTodo('input', 'content__text');
+      todoInputTextEdit.name = 'editText';
       todoInputTextEdit.type = 'text';
 
       const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
