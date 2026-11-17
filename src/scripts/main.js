@@ -24,43 +24,64 @@ const updateUI = () => {
   render();
 };
 
+const saveAndUpdate = () => {
+  saveToLocalStorage();
+  updateUI();
+};
+
 // --------- event delegation (delete, edit, save) ----------
 container.addEventListener('click', (e) => {
   const deleteBtn = e.target.closest('.button__delete');
   const editBtn = e.target.closest('.button__edit');
   const saveBtn = e.target.closest('.button__save-edit');
 
-  // data-id container
-  const todoItemContainer = e.target.closest('.content__item');
-  if (!todoItemContainer) return;
+  if (deleteBtn || editBtn || saveBtn) {
+    // data-id container
+    const todoItemContainer = e.target.closest('.content__item');
+    if (!todoItemContainer) return;
 
-  const todoId = todoItemContainer.dataset.id;
+    const todoId = todoItemContainer.dataset.id;
 
-  if (deleteBtn) {
-    removeTodo(todoId);
-  }
+    if (deleteBtn) {
+      removeTodo(todoId);
+    }
 
-  if (editBtn) {
-    editingTodoId = todoId;
-    render();
-  }
+    if (editBtn) {
+      editingTodoId = todoId;
+      render();
+    }
 
-  if (saveBtn) {
-    const todoInputTextEdit = saveBtn.previousElementSibling;
+    if (saveBtn) {
+      const todoInputTextEdit = saveBtn.previousElementSibling;
 
-    const todoSaveItem = todoList.find((item) => item.id === todoId);
-    if (!todoSaveItem) return;
+      const todoSaveItem = todoList.find((item) => item.id === todoId);
+      if (!todoSaveItem) return;
 
-    if (todoInputTextEdit.value.trim()) {
-      todoSaveItem.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
-      editingTodoId = null;
-      saveToLocalStorage();
-      updateUI();
-    } else {
-      alert('You cannot save empty text! Please, write your tasks');
-      return;
+      if (todoInputTextEdit.value.trim()) {
+        todoSaveItem.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
+        editingTodoId = null;
+        saveToLocalStorage();
+        updateUI();
+      } else {
+        alert('You cannot save empty text! Please, write your tasks');
+        return;
+      }
     }
   }
+});
+
+container.addEventListener('change', (e) => {
+  const checkboxBtn = e.target.closest('.content__checkbox');
+  if (!checkboxBtn) return;
+
+  const todoItemContainer = checkboxBtn.closest('.content__item');
+  if (!todoItemContainer) return;
+  const todoId = todoItemContainer.dataset.id;
+
+  const todoItemCheckbox = todoList.find((item) => item.id === todoId);
+  if (!todoItemCheckbox) return;
+
+  completedTodo(checkboxBtn, todoItemCheckbox);
 });
 
 const createElementTodo = (element, elementClass) => {
@@ -104,8 +125,7 @@ const addTodoItem = () => {
 const completedTodo = (todoCheckbox, todo) => {
   todo.completed = todoCheckbox.checked;
 
-  saveToLocalStorage();
-  updateUI();
+  saveAndUpdate();
 };
 
 addTodoBtn.addEventListener('click', addTodoItem);
@@ -127,8 +147,7 @@ const removeTodo = (id) => {
 
   if (id === editingTodoId) editingTodoId = null;
 
-  saveToLocalStorage();
-  updateUI();
+  saveAndUpdate();
 };
 
 const removeAddClassActiveArray = (array, item) => {
@@ -147,6 +166,8 @@ const filteredTasks = (state) => {
         return !el.completed;
       case 'completed':
         return el.completed;
+      default:
+        return true;
     }
   });
 };
@@ -238,10 +259,6 @@ const render = () => {
         <use href="src/assets/icons/sprites.svg#delete-icon"></use>
       </svg>
     `;
-
-      todoCheckbox.addEventListener('change', () =>
-        completedTodo(todoCheckbox, todo)
-      );
 
       // added count
       todoWrapper.append(todoCheckbox);
