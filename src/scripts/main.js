@@ -299,19 +299,68 @@ btnCompleted.addEventListener('click', () => {
 
 updateUI();
 
+// const todoList1 = [
+//   { id: 1, text: 'Learn JS', completed: false },
+//   { id: 2, text: 'Learn CSS', completed: true },
+//   { id: 3, text: 'Learn HTML', completed: false },
+//   { id: 4, text: 'Learn React', completed: true }
+// ];
+
+// const analyzeTodos = (todoList) => {
+//   return todoList.reduce(
+//     (acc, { text, completed }) => {
+//       acc.total++;
+//       if (completed) {
+//         acc.completed++;
+//       } else {
+//         acc.active++;
+//       }
+//       acc.totalTextLength += text.length;
+//       return acc;
+//     },
+//     {
+//       total: 0,
+//       active: 0,
+//       completed: 0,
+//       totalTextLength: 0
+//     }
+//   );
+// };
+
+// const groupedTodos = groupTodos(todoList);
+
+// groupedTodos.active[0].text = 'Learn JavaScript';
+// groupedTodos.active[0].settings.color = 'blue';
+
+// console.log(groupedTodos);
+
+// console.log(analyzeTodos(todoList1));
+
 const todoList1 = [
-  { id: 1, text: 'Learn JS', completed: false },
-  { id: 2, text: 'Learn CSS', completed: true },
-  { id: 3, text: 'Learn HTML', completed: false },
-  { id: 4, text: 'Learn React', completed: true }
+  { id: 1, text: 'Learn JavaScript', completed: false },
+  { id: 2, text: 'Practice reduce', completed: true },
+  { id: 3, text: 'Build Todo app', completed: false },
+  { id: 4, text: 'Learn destructuring', completed: true }
 ];
 
-const groupTodos = (todoList) => {
-  return (
-    todoList.reduce(),
+// const completedTodo = [1, 2, 3, 4, 5, 6];
+
+const completedTodo1 = (todoList) => {
+  return todoList.reduce(
+    (acc, { text, completed }) => {
+      if (completed) {
+        acc[completed];
+      } else {
+        acc[completed];
+      }
+
+      return acc;
+    },
     {
-      active: [],
-      completed: []
+      false: [],
+      true: []
     }
   );
 };
+
+console.log(completedTodo1(todoList1));
