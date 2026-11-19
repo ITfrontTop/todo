@@ -298,3 +298,20 @@ btnCompleted.addEventListener('click', () => {
 });
 
 updateUI();
+
+const todoList1 = [
+  { id: 1, text: 'Learn JS', completed: false },
+  { id: 2, text: 'Learn CSS', completed: true },
+  { id: 3, text: 'Learn HTML', completed: false },
+  { id: 4, text: 'Learn React', completed: true }
+];
+
+const groupTodos = (todoList) => {
+  return (
+    todoList.reduce(),
+    {
+      active: [],
+      completed: []
+    }
+  );
+};
