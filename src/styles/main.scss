@@ -27,6 +27,27 @@
   color: v.$color-text;
 }
 
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__input {
+    width: 80%;
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+
+    @extend %borderAndBoxShadow;
+
+    &::placeholder {
+      color: v.$color-gray;
+    }
+  }
+}
+
 .add {
   display: flex;
   justify-content: space-between;

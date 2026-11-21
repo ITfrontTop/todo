@@ -303,6 +303,7 @@ const input = document.querySelector('[data-text-field]');
 const addTodoBtn = document.querySelector('[data-add-todo-btn]');
 const container = document.querySelector('[data-todo-container]');
 const countTodo = document.querySelector('[data-count-todo]');
+const searchInput = document.querySelector('[data-search-field]');
 
 // category !!!!!!!!!!!!!!!!!!!!!!!!
 const categoryListButton = document.querySelectorAll('.count__item');
@@ -315,6 +316,22 @@ let stateTodo = 'all';
 
 // edit state variable
 let editingTodoId = null;
+
+// search
+let searchQuery = '';
+
+searchInput.addEventListener('input', (e) => {
+  searchQuery = e.target.value.trim();
+  console.log(searchQuery);
+});
+
+const searchTodo = (todoList) => {
+  const filteredText = todoList.filter(({ text }) =>
+    text.includes(searchQuery)
+  );
+
+  return filteredText;
+};
 
 const todoList = JSON.parse(localStorage.getItem('todos')) || [];
 
