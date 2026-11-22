@@ -321,16 +321,14 @@ let editingTodoId = null;
 let searchQuery = '';
 
 searchInput.addEventListener('input', (e) => {
-  searchQuery = e.target.value.trim();
-  console.log(searchQuery);
+  searchQuery = e.target.value.trim().toLowerCase();
+  render();
 });
 
 const searchTodo = (todoList) => {
-  const filteredText = todoList.filter(({ text }) =>
-    text.includes(searchQuery)
+  return todoList.filter(({ text }) =>
+    text.toLowerCase().includes(searchQuery)
   );
-
-  return filteredText;
 };
 
 const todoList = JSON.parse(localStorage.getItem('todos')) || [];
@@ -494,27 +492,29 @@ const render = () => {
   container.innerHTML = '';
 
   // added tasks state
-  const renderTasks = filteredTasks(stateTodo).toSorted(
+  const renderTasks = searchTodo(filteredTasks(stateTodo)).toSorted(
     (a, b) => a.completed - b.completed
   );
 
-  console.log(renderTasks);
-
   if (renderTasks.length === 0) {
-    const messageEnterText = createElementTodo('h3', 'content__message');
+    const emptyMessage = createElementTodo('h3', 'content__message');
 
-    switch (stateTodo) {
-      case 'all':
-        messageEnterText.textContent = 'Enter your tasks!';
-        break;
-      case 'active':
-        messageEnterText.textContent = 'No active tasks!';
-        break;
-      case 'completed':
-        messageEnterText.textContent = 'No completed tasks! Do something!';
+    if (searchQuery.length) {
+      emptyMessage.textContent = 'No matching tasks!';
+    } else {
+      switch (stateTodo) {
+        case 'all':
+          emptyMessage.textContent = 'Enter your tasks!';
+          break;
+        case 'active':
+          emptyMessage.textContent = 'No active tasks!';
+          break;
+        case 'completed':
+          emptyMessage.textContent = 'No completed tasks! Do something!';
+      }
     }
 
-    container.append(messageEnterText);
+    container.append(emptyMessage);
   }
 
   renderTasks.forEach((todo) => {
