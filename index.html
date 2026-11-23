@@ -25,13 +25,19 @@
           <h1 class="title">My Tasks</h1>
 
           <div class="search">
-            <input
-              class="search__input"
-              name="search"
-              data-search-field
-              placeholder="Search tasks..."
-            />
-            <button class="search__delete-btn">X</button>
+            <div class="search__inner">
+              <input
+                class="search__input"
+                name="search"
+                data-search-field
+                placeholder="Search tasks..."
+              />
+              <button class="search__delete-btn" data-search-delete-btn>
+                <svg class="search__delete-icon">
+                  <use href="src/assets/icons/sprites.svg#close-icon"></use>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div class="add">

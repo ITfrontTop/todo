@@ -32,8 +32,13 @@
   justify-content: center;
   align-items: center;
 
-  &__input {
+  &__inner {
     width: 80%;
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
     padding: 1rem 1.5rem;
     font-size: 1.5rem;
     line-height: 1.5;
@@ -45,6 +50,21 @@
     &::placeholder {
       color: v.$color-gray;
     }
+  }
+
+  &__delete-btn {
+    position: absolute;
+
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    cursor: pointer;
+  }
+
+  &__delete-icon {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }
 
