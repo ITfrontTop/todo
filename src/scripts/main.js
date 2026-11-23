@@ -201,6 +201,10 @@ const filteredTasks = (state) => {
   });
 };
 
+const clearCompletedTodo = () => {};
+
+clearCompletedTodo(todoList);
+
 // ----------------- main render function ---------------------
 const render = () => {
   container.innerHTML = '';

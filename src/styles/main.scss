@@ -170,6 +170,14 @@
 
     color: v.$color-white;
     background-color: v.$color-black;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s linear;
+
+    &:hover {
+      background-color: v.$color-text;
+    }
   }
 }
 
