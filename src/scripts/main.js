@@ -22,6 +22,20 @@ let searchQuery = '';
 
 searchInput.addEventListener('input', (e) => {
   searchQuery = e.target.value.trim().toLowerCase();
+  if (searchQuery) {
+    searchDeleteBtn.style.display = 'block';
+  } else {
+    searchDeleteBtn.style.display = 'none';
+  }
+
+  render();
+});
+
+searchDeleteBtn.addEventListener('click', () => {
+  searchQuery = '';
+  searchInput.value = '';
+  searchDeleteBtn.style.display = 'none';
+
   render();
 });
 

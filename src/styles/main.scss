@@ -53,11 +53,12 @@
   }
 
   &__delete-btn {
+    display: none;
+
     position: absolute;
 
     right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1.3rem;
 
     cursor: pointer;
   }
@@ -144,6 +145,31 @@
     &.active {
       color: v.$color-text;
     }
+  }
+
+  &__item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  @media (max-width: 320px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.clear {
+  &__btn {
+    padding: 0.5rem 1rem;
+
+    @extend %borderAndBoxShadow;
+
+    font-size: 1.25rem;
+    line-height: 1.5;
+
+    color: v.$color-white;
+    background-color: v.$color-black;
   }
 }
 
