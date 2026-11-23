@@ -2,8 +2,11 @@ const input = document.querySelector('[data-text-field]');
 const addTodoBtn = document.querySelector('[data-add-todo-btn]');
 const container = document.querySelector('[data-todo-container]');
 const countTodo = document.querySelector('[data-count-todo]');
+// search
 const searchInput = document.querySelector('[data-search-field]');
 const searchDeleteBtn = document.querySelector('[data-search-delete-btn]');
+// clear btn
+const clearCompletedBtn = document.querySelector('[data-clear-completed-btn]');
 
 // category !!!!!!!!!!!!!!!!!!!!!!!!
 const categoryListButton = document.querySelectorAll('.count__item');
@@ -201,9 +204,23 @@ const filteredTasks = (state) => {
   });
 };
 
-const clearCompletedTodo = () => {};
+// ------------------------------------
+const clearCompletedTodo = () => {
+  const isHaveCompletedTasks = todoList.some(({ completed }) => completed);
 
-clearCompletedTodo(todoList);
+  if (!isHaveCompletedTasks) return;
+
+  // filter active todo
+  const activeTodo = todoList.filter(({ completed }) => !completed);
+
+  // delete and added active todo
+  todoList.splice(0);
+  todoList.push(...activeTodo);
+
+  saveAndUpdate();
+};
+
+clearCompletedBtn.addEventListener('click', clearCompletedTodo);
 
 // ----------------- main render function ---------------------
 const render = () => {
