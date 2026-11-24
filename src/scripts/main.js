@@ -18,9 +18,18 @@ const btnCompleted = document.querySelector('[data-category-completed]');
 let stateTodo = 'all';
 
 // edit state variable
-let editingTodoId = null;
+// let editingTodoId = null;
 // edit input text
-let editingTodoText = '';
+// let editingTodoText = '';
+let editingTodo = {
+  id: null,
+  text: ''
+};
+
+const resetEditingTodo = () => {
+  editingTodo.id = null;
+  editingTodo.text = '';
+};
 
 // search
 let searchQuery = '';
@@ -81,24 +90,28 @@ container.addEventListener('click', (e) => {
       removeTodo(todoId);
     }
 
+    // editingTodoText = todoList.find(({ id }) => todoId === id).text;
+    // if (!editingTodoText) return;
     if (editBtn) {
-      editingTodoId = todoId;
-      editingTodoText = todoList.find(({ id }) => todoId === id).text;
+      const editingTodoItem = todoList.find(({ id }) => todoId === id);
+      if (!editingTodoItem) return;
+
+      editingTodo.text = editingTodoItem.text;
+      editingTodo.id = todoId;
 
       render();
     }
 
     if (saveBtn) {
-      const todoInputTextEdit = saveBtn.previousElementSibling;
-
       const todoSaveItem = todoList.find((item) => item.id === todoId);
       if (!todoSaveItem) return;
 
-      if (todoInputTextEdit.value.trim()) {
-        todoSaveItem.text = todoInputTextEdit.value.trim().replace(/\s+/g, ' ');
-        editingTodoId = null;
-        saveToLocalStorage();
-        updateUI();
+      if (editingTodo.text.trim()) {
+        todoSaveItem.text = editingTodo.text.trim().replace(/\s+/g, ' ');
+        editingTodo.id = null;
+        editingTodo.text = '';
+
+        saveAndUpdate();
       } else {
         alert('You cannot save empty text! Please, write your tasks');
         return;
@@ -181,7 +194,10 @@ const removeTodo = (id) => {
 
   todoList.splice(todoIndex, 1);
 
-  if (id === editingTodoId) editingTodoId = null;
+  if (id === editingTodo.id) {
+    editingTodo.id = null;
+    editingTodo.text = '';
+  }
 
   saveAndUpdate();
 };
@@ -300,20 +316,20 @@ const render = () => {
 
       // change editingTodoText
       todoInputTextEdit.addEventListener('input', (e) => {
-        editingTodoText = e.target.value;
-        console.log(editingTodoText);
+        editingTodo.text = e.target.value;
       });
 
       // press Escape cancel edit input text
       todoInputTextEdit.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' || e.key === 'Esc') {
-          editingTodoId = null;
+          editingTodo.id = null;
+          editingTodo.text = '';
           updateUI();
         }
       });
 
       todoWrapper.prepend(todoInputTextEdit);
-      todoInputTextEdit.value = editingTodoText;
+      todoInputTextEdit.value = editingTodo.text;
       todoInputTextEdit.after(buttonSaveEdit);
     };
 
@@ -336,7 +352,7 @@ const render = () => {
       buttonWrapper.append(buttonDelete);
     };
 
-    if (editingTodoId === todo.id) {
+    if (editingTodo.id === todo.id) {
       todoCreateEditElement();
     } else {
       todoCreateDefaultElement();
@@ -347,7 +363,8 @@ const render = () => {
 const changeCategoryState = (state, btn) => {
   removeAddClassActiveArray(categoryListButton, btn);
   stateTodo = state;
-  editingTodoId = null;
+  editingTodo.id = null;
+  editingTodo.text = '';
   updateUI();
 };
 
