@@ -17,10 +17,7 @@ const btnCompleted = document.querySelector('[data-category-completed]');
 // category change counter
 let stateTodo = 'all';
 
-// edit state variable
-// let editingTodoId = null;
-// edit input text
-// let editingTodoText = '';
+// edit state variables
 let editingTodo = {
   id: null,
   text: ''
@@ -90,8 +87,6 @@ container.addEventListener('click', (e) => {
       removeTodo(todoId);
     }
 
-    // editingTodoText = todoList.find(({ id }) => todoId === id).text;
-    // if (!editingTodoText) return;
     if (editBtn) {
       const editingTodoItem = todoList.find(({ id }) => todoId === id);
       if (!editingTodoItem) return;
@@ -108,8 +103,7 @@ container.addEventListener('click', (e) => {
 
       if (editingTodo.text.trim()) {
         todoSaveItem.text = editingTodo.text.trim().replace(/\s+/g, ' ');
-        editingTodo.id = null;
-        editingTodo.text = '';
+        resetEditingTodo();
 
         saveAndUpdate();
       } else {
@@ -195,8 +189,7 @@ const removeTodo = (id) => {
   todoList.splice(todoIndex, 1);
 
   if (id === editingTodo.id) {
-    editingTodo.id = null;
-    editingTodo.text = '';
+    resetEditingTodo();
   }
 
   saveAndUpdate();
@@ -322,8 +315,7 @@ const render = () => {
       // press Escape cancel edit input text
       todoInputTextEdit.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' || e.key === 'Esc') {
-          editingTodo.id = null;
-          editingTodo.text = '';
+          resetEditingTodo();
           updateUI();
         }
       });
@@ -363,8 +355,7 @@ const render = () => {
 const changeCategoryState = (state, btn) => {
   removeAddClassActiveArray(categoryListButton, btn);
   stateTodo = state;
-  editingTodo.id = null;
-  editingTodo.text = '';
+  resetEditingTodo();
   updateUI();
 };
 
