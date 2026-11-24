@@ -19,6 +19,8 @@ let stateTodo = 'all';
 
 // edit state variable
 let editingTodoId = null;
+// edit input text
+let editingTodoText = '';
 
 // search
 let searchQuery = '';
@@ -81,6 +83,8 @@ container.addEventListener('click', (e) => {
 
     if (editBtn) {
       editingTodoId = todoId;
+      editingTodoText = todoList.find(({ id }) => todoId === id).text;
+
       render();
     }
 
@@ -294,6 +298,12 @@ const render = () => {
       const buttonSaveEdit = createElementTodo('button', 'button__save-edit');
       buttonSaveEdit.textContent = 'Save';
 
+      // change editingTodoText
+      todoInputTextEdit.addEventListener('input', (e) => {
+        editingTodoText = e.target.value;
+        console.log(editingTodoText);
+      });
+
       // press Escape cancel edit input text
       todoInputTextEdit.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' || e.key === 'Esc') {
@@ -303,7 +313,7 @@ const render = () => {
       });
 
       todoWrapper.prepend(todoInputTextEdit);
-      todoInputTextEdit.value = todo.text;
+      todoInputTextEdit.value = editingTodoText;
       todoInputTextEdit.after(buttonSaveEdit);
     };
 
