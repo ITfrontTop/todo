@@ -50,7 +50,7 @@ searchDeleteBtn.addEventListener('click', () => {
   render();
 });
 
-const searchTodo = (todoList) => {
+const searchTodo = (todoList, searchQuery) => {
   return todoList.filter(({ text }) =>
     text.toLowerCase().includes(searchQuery)
   );
@@ -217,7 +217,7 @@ const removeAddClassActiveArray = (array, item) => {
   item.classList.add('active');
 };
 
-const filteredTasks = (state) => {
+const filteredTasks = (todoList, state) => {
   return todoList.filter((el) => {
     switch (state) {
       case 'all':
@@ -250,14 +250,18 @@ const clearCompletedTodo = () => {
 
 clearCompletedBtn.addEventListener('click', clearCompletedTodo);
 
+const getVisibleTodos = (todoList, stateTodo, searchQuery) => {
+  return searchTodo(filteredTasks(todoList, stateTodo), searchQuery).toSorted(
+    (a, b) => a.completed - b.completed
+  );
+};
+
 // ----------------- main render function ---------------------
 const render = () => {
   container.innerHTML = '';
 
   // added tasks state
-  const renderTasks = searchTodo(filteredTasks(stateTodo)).toSorted(
-    (a, b) => a.completed - b.completed
-  );
+  const renderTasks = getVisibleTodos(todoList, stateTodo, searchQuery);
 
   if (renderTasks.length === 0) {
     const emptyMessage = createElementTodo('h3', 'content__message');
