@@ -101,8 +101,23 @@ container.addEventListener('click', (e) => {
       const todoSaveItem = todoList.find((item) => item.id === todoId);
       if (!todoSaveItem) return;
 
-      if (editingTodo.text.trim()) {
-        todoSaveItem.text = editingTodo.text.trim().replace(/\s+/g, ' ');
+      const editingTodoNormalized = editingTodo.text
+        .trim()
+        .replace(/\s+/g, ' ');
+      const todoSaveItemNormalized = todoSaveItem.text
+        .trim()
+        .replace(/\s+/g, ' ');
+
+      // if (editingTodoNormalized) return;
+
+      if (editingTodoNormalized) {
+        if (editingTodoNormalized === todoSaveItemNormalized) {
+          resetEditingTodo();
+          updateUI();
+          return;
+        }
+
+        todoSaveItem.text = editingTodoNormalized;
         resetEditingTodo();
 
         saveAndUpdate();
